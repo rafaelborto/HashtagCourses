@@ -1,0 +1,10 @@
+let
+    DataMin= List.Min(#"Base Vendas"[Data da Venda]),
+    DataMax = List.Max(#"Base Vendas"[Data da Venda]),
+    QntDias = Duration.Days(DataMax-DataMin)+1,
+    Diarias = List.Dates(DataMin, QntDias, #duration(1, 0, 0, 0)),
+    #"Converted to Table" = Table.FromList(Diarias, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+    #"Renamed Columns" = Table.RenameColumns(#"Converted to Table",{{"Column1", "Data Diárias"}}),
+    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns",{{"Data Diárias", type date}})
+in
+    #"Changed Type"
